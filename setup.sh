@@ -39,4 +39,4 @@ if [ ! $(cat $FILE | grep "alias ask*" | wc -l) -gt "0" ]; then
 	echo -e "alias ask=\"$SCRIPT_PATH/gptask.sh \$@\"\nalias askcln=\"rm -f $SCRIPT_PATH/log\"" >> $FILE
 fi
 
-echo "- COnfigirations is complete!"
+echo "- Configirations is complete!"
