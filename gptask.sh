@@ -52,6 +52,13 @@ RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions -H "Content-Type: 
 # cleans "searching" line
 echo -ne "                    \033[0K\r"
 
+# checks if error occured in fetch
+ERROR=$(echo -E $RESPONSE | jq .error.message)
+if [ -n "$ERROR" ]; then
+	echo "ERROR: $ERROR"
+	exit 1
+fi
+
 # saves prompt
 echo -E $PROMPT, >> $SCRIPT_PATH/log
 
@@ -59,7 +66,8 @@ ANSWER=$(echo -E $RESPONSE | jq '.choices | .[] | .message.content')
 
 # saves context
 echo -E $(echo -E $RESPONSE | jq '.choices | .[] | .message'), >> $SCRIPT_PATH/log
-
+ $ERROR"
+ exit 1
 # erases old chat log
 if [ $(cat $SCRIPT_PATH/log 2> /dev/null | wc -l) -gt "$((MAX_CHAT_MEMORY * 2 + 1))" ]; then
 	awk 'NR>2' $SCRIPT_PATH/log > $SCRIPT_PATH/tmp && mv $SCRIPT_PATH/tmp $SCRIPT_PATH/log
