@@ -18,11 +18,13 @@ $ source ~/.zshrc
 # Usage
 To run the script, use the **ask** command followed by your promp
 
-```bash command
+### Command:
+```bash 
 $ ask "who are you?"
 ```
 
-```bash response
+### Response
+```bash
 "I am a helpful Linux shell assistant here to assist you with any questions or problems you may have. I can provide information, guidance, and execute commands in the Linux shell environment. How can I assist you today?"
 ```
 
