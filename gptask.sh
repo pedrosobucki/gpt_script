@@ -22,9 +22,15 @@ if [ -z $KEY ]; then
 	exit 1
 fi
 
+help_info() {
+	echo -e "Flags:\n\t-h: Display help info\n\t-t: Changes max tokens returned by request (_MAX\_TOKENS_)\n\t-m: Changes model used in request (_MODEL_)\n\t-T: Changes temperature for promp processing (_TEMPERATURE_)"
+	exit 0
+}
+
 # read optional flags
-while getopts ":t:T:m:" opt; do
+while getopts ":t:T:m:h" opt; do
         case $opt in
+		h) help_info;;
                 t) MAX_TOKENS=$OPTARG;;
                 T) TEMPERATURE=$OPTARG;;
                 m) MODEL=$OPTARG;;
