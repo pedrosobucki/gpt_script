@@ -35,6 +35,8 @@ There are optional flags for overwriting some configuration fields
 - **-m**: Changes model used in request (_MODEL_)
 - **-T**: Changes temperature for promp processing (_TEMPERATURE_)
 
+the **-h** flag can be used to read about available flags directly from the script.
+
 ### Example
 ```bash
 $ ask -t 300 -m gpt-4 -T 0.7 "tell me about linux"
