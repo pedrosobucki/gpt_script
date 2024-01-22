@@ -11,6 +11,7 @@ read -p "Please provide an OpenAI API KEY: " key
 
 if [ -z $key ]; then
 	echo "- You MUST set an API KEY."
+	echo "Generate it at: https://platform.openai.com/api-keys"
 	exit 1
 fi
 
@@ -39,4 +40,4 @@ if [ ! $(cat $FILE | grep "alias ask*" | wc -l) -gt "0" ]; then
 	echo -e "alias ask=\"$SCRIPT_PATH/gptask.sh \$@\"\nalias askcln=\"rm -f $SCRIPT_PATH/log\"" >> $FILE
 fi
 
-echo "- Configirations is complete!"
+echo -e "- Configuration is complete!\nReload yout shell source to use 'ask' and 'askcln' commands."
