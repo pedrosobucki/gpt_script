@@ -40,5 +40,8 @@ There are optional flags for overwriting some configuration fields
 $ ask -t 300 -m gpt-4 -T 0.7 "tell me about linux"
 ```
 
+## Cleaning previous conversations
+Previous promps and responses are kept in the 'log' file. You can clean all previous conversations by deleting the 'log' file or simply running the command `askcln`
+
 # References
 - [OpenAI API Docs](https://platform.openai.com/docs/api-reference/introduction)
