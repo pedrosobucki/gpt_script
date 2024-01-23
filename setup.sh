@@ -33,6 +33,7 @@ case $SHELL in
 	/bin/bash) FILE=$HOME/.bashrc;;
 	/bin/zsh) FILE=$HOME/.zshrc;;
 	/bin/fish) FILE=$HOME/.config/fish/config.fish;;
+	/bin/ash) FILE=/etc/profile;;
 	*) echo "Could not locate shell to create shortcuts"; exit 1;;
 esac
 
