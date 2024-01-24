@@ -1,12 +1,20 @@
 #!/bin/bash
 
-
 SCRIPT_PATH=$(dirname $0)
 PREV_CONTEXT=$(cat $SCRIPT_PATH/log 2> /dev/null)
-PROMPT="{
-	\"role\": \"user\",
-	\"content\": \"$1\"
-}"
+
+# retrieves stdin if exists
+STDIN=""
+if [ ! -t 0 ]; then
+	while IFS= read -r line; do
+		STDIN="$STDIN\n$(echo -E $line)"
+	done
+fi
+
+PROMPT='{
+	"role": "user",
+	"content": "'$(echo -E ${@: -1} $STDIN | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')'"
+}'
 
 # imports config variables
 CONFIG=$SCRIPT_PATH/config
@@ -40,20 +48,21 @@ done
 
 echo -ne "  [ Generating... ]\033[0K\r"
 
-RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -d "
-        {
-	\"model\": \"$MODEL\",
-	\"messages\": [
+BODY='{
+	"model": "'$MODEL'",
+	"messages": [
 		{
-			\"role\": \"system\",
-			\"content\": \"You are a helpful linux shell application which will have it's output response printed in the terminal, so use only characters which are terminal friendly whe writing your answer. You also should write concise messages, as the user will prompt you again if more detailed information is needed.\"
+			"role": "system",
+			"content": "You are a helpful linux shell application which will have its output response printed in the terminal, so use only characters which are terminal friendly whe writing your answer. You also should write concise messages, as the user will prompt you again if more detailed information is needed."
 		},
-		$PREV_CONTEXT
-		$PROMPT
+		'$PREV_CONTEXT'
+		'${PROMPT}'
 	],
-	\"max_tokens\": $MAX_TOKENS, 
-	\"temperature\": $TEMPERATURE
-}")
+	"max_tokens": '$MAX_TOKENS', 
+	"temperature": '$TEMPERATURE'
+}'
+
+RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -d "$BODY")
 
 # cleans "searching" line
 echo -ne "                    \033[0K\r"
