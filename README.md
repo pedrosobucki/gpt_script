@@ -42,8 +42,21 @@ the **-h** flag can be used to read about available flags directly from the scri
 $ ask -t 300 -m gpt-4 -T 0.7 "tell me about linux"
 ```
 
-## Cleaning previous conversations
-Previous promps and responses are kept in the 'log' file. You can clean all previous conversations by deleting the 'log' file or simply running the command `askcln`
+# Configuration file
+Configuration options are stored in the `config` file, created during the setup process. If any configuration is missing from the `config` file, the one contained in `config.example` will be used instead.
+
+Configuration parameters are:
+- **KEY**: OpenAI API key
+- **MODEL**: Model used in the request
+- **MAX_TOKENS**: Limit of generated response tokens
+- **TEMPERATURE**: Response temperature
+- **MAX_CHAT_MEMORY**: Number of exchanged kept during the conversation for context
+- **KNOW_CURRENT_DIR**: Defines if current dir will be informed durring conversation
+
+Configuration variables from `config` and/or `config.example` files are always overwriten by flags sent when calling the script.
+
+# Cleaning previous conversations
+Previous promps and responses are kept in the 'log' file. You can clean all previous conversations by deleting the 'log' file or simply running the command `askcln`.
 
 # References
 - [OpenAI API Docs](https://platform.openai.com/docs/api-reference/introduction)

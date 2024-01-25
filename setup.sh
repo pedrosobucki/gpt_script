@@ -27,7 +27,10 @@ temperature=${temperature:-0.2}
 read -p "Max chat memory (will remember this many retrospective prompts) [5]: " max_chat_memory
 max_chat_memory=${max_chat_memory:-5}
 
-echo -e "KEY=$key\nMODEL=$model\nMAX_TOKENS=$max_tokens\nTEMPERATURE=$temperature\nMAX_CHAT_MEMORY=$max_chat_memory" >> config
+read -p "Know current directory [true]: " know_current_dir
+know_current_dir=${know_current_dir:-true}
+
+echo -e "KEY=$key\nMODEL=$model\nMAX_TOKENS=$max_tokens\nTEMPERATURE=$temperature\nMAX_CHAT_MEMORY=$max_chat_memory\nKNOW_CURRENT_DIR=$know_current_dir" >> config
 
 case $SHELL in
 	/bin/bash) FILE=$HOME/.bashrc;;

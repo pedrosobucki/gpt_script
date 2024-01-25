@@ -17,10 +17,11 @@ PROMPT='{
 }'
 
 # imports config variables
-CONFIG=$SCRIPT_PATH/config
+CONFIG=$SCRIPT_PATH/config.example
+export $(grep -v '^#' $CONFIG | xargs)
 
-if [ ! -f $CONFIG ]; then
-	CONFIG=$SCRIPT_PATH/config.example
+if [ -f $SCRIPT_PATH/config ]; then
+	CONFIG=$SCRIPT_PATH/config
 fi
 
 export $(grep -v '^#' $CONFIG | xargs)
@@ -48,12 +49,17 @@ done
 
 echo -ne "  [ Generating... ]\033[0K\r"
 
+CURRENT_DIR=
+if [ $KNOW_CURRENT_DIR = "true" ]; then
+	CURRENT_DIR="You are currently in the \\\"$PWD\\\" directory"
+fi
+
 BODY='{
 	"model": "'$MODEL'",
 	"messages": [
 		{
 			"role": "system",
-			"content": "You are a helpful linux shell application which will have its output response printed in the terminal, so use only characters which are terminal friendly whe writing your answer. You also should write concise messages, as the user will prompt you again if more detailed information is needed."
+			"content": "You are a helpful linux shell application which will have its output response printed in the terminal, so use only characters which are terminal friendly whe writing your answer. You also should write concise messages, as the user will prompt you again if more detailed information is needed.'$CURRENT_DIR'"
 		},
 		'$PREV_CONTEXT'
 		'${PROMPT}'
