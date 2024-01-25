@@ -18,7 +18,7 @@ $ source ~/.zshrc
 # Usage
 To run the script, use the **ask** command followed by your promp
 
-### Command:
+### Command
 ```bash 
 $ ask "who are you?"
 ```
@@ -40,6 +40,23 @@ the **-h** flag can be used to read about available flags directly from the scri
 ### Example
 ```bash
 $ ask -t 300 -m gpt-4 -T 0.7 "tell me about linux"
+```
+
+## Processing standard input
+The script will append stdin to the prompt, yielding results as following:
+
+### Command
+```bash
+$ cat gptask.sh | ask "what is this?"
+```
+or
+```bash
+$ ask "what is this?" < gptask.sh
+```
+
+### Response
+```bash
+"This is a bash script that interacts with the OpenAI API to generate responses based on user input. The script reads from standard input or command line arguments, sends a request to the OpenAI API, and prints the response. It also handles configuration variables, provides help information, and logs previous interactions."
 ```
 
 # Configuration file
