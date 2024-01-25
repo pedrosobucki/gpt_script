@@ -51,7 +51,7 @@ echo -ne "  [ Generating... ]\033[0K\r"
 
 CURRENT_DIR=
 if [ $KNOW_CURRENT_DIR = "true" ]; then
-	CURRENT_DIR="You are currently in the \\\"$PWD\\\" directory"
+	CURRENT_DIR="You are currently in the $PWD directory"
 fi
 
 BODY='{
