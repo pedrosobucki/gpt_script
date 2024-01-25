@@ -11,6 +11,7 @@ if [ ! -t 0 ]; then
 	done
 fi
 
+# treats prompt special chars for json format
 PROMPT='{
 	"role": "user",
 	"content": "'$(echo -E ${@: -1} $STDIN | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')'"
@@ -51,7 +52,7 @@ echo -ne "  [ Generating... ]\033[0K\r"
 
 CURRENT_DIR=
 if [ $KNOW_CURRENT_DIR = "true" ]; then
-	CURRENT_DIR="You are currently in the $PWD directory"
+	CURRENT_DIR="You are currently in the $PWD directory."
 fi
 
 BODY='{
@@ -59,7 +60,7 @@ BODY='{
 	"messages": [
 		{
 			"role": "system",
-			"content": "You are a helpful linux shell application which will have its output response printed in the terminal, so use only characters which are terminal friendly whe writing your answer. You also should write concise messages, as the user will prompt you again if more detailed information is needed.'$CURRENT_DIR'"
+			"content": "You are a helpful linux shell application which will have its output response printed in the terminal, so use only characters which are terminal friendly whe writing your answer. You also should write concise messages, as the user will prompt you again if more detailed information is needed. The current user is '$USER'.'$CURRENT_DIR'"
 		},
 		'$PREV_CONTEXT'
 		'${PROMPT}'
