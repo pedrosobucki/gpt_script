@@ -1,0 +1,4 @@
+{ "role": "user", "content": "tell me something" },
+{ "role": "assistant", "content": "You are currently in the /home/pedrosobucki/gpt directory." },
+{ "role": "user", "content": "who is the best programmer?" },
+{ "role": "assistant", "content": "There is no definitive answer to who the best programmer is, as it is subjective and depends on individual skills, experience, and contributions to the field. Many programmers have made significant contributions and achieved great success in their respective areas of expertise." }
