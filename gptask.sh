@@ -2,11 +2,14 @@
 
 SCRIPT_PATH=$(dirname $0)
 HIST_DIR=$SCRIPT_PATH/hist
-PREV_CONTEXT=$(cat $HIST_DIR/chat1 2> /dev/null)
 
-if [ -z $PREV_CONTEXT ];then
-    $PREV_CONTEXT="$PREV_CONTEXT,"
+if [ ! -f $HIST_DIR/chat1.json ]; then
+    echo '{"hist":[]}' > $HIST_DIR/chat1.json
 fi
+
+# retrieves previous prompts context 
+PREV_CONTEXT=$(cat $HIST_DIR/chat1.json | jq '.hist')
+PREV_CONTEXT=${PREV_CONTEXT:1:-1}
 
 # imports config variables
 export $(grep -v '^#' $SCRIPT_PATH/config.example | xargs)

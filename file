@@ -1,0 +1,1 @@
+/home/pedrosobucki/gpt/gptask.sh: linha 10: ${$(cat $HIST_DIR/chat1.json):1:-1}: substituição incorreta

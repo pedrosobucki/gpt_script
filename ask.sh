@@ -56,16 +56,16 @@ if [ "$ERROR" != "null" ]; then
 fi
 
 # saves prompt
-echo -E $PROMPT, >> $HIST_DIR/chat1
+echo -E $PROMPT, >> $HIST_DIR/chat1.json
 
 ANSWER=$(echo -E $RESPONSE | jq '.choices | .[] | .message.content')
 
 # saves context
-echo -E $(echo -E $RESPONSE | jq '.choices | .[] | .message'), >> $HIST_DIR/chat1
+echo -E $(echo -E $RESPONSE | jq '.choices | .[] | .message'), >> $HIST_DIR/chat1.json
 
-# erases old chat chat1
-if [ $(cat $HIST_DIR/chat1 2> /dev/null | wc -l) -gt "$((MAX_CHAT_MEMORY * 2 + 1))" ]; then
-	awk 'NR>2' $HIST_DIR/chat1 > $SCRIPT_PATH/tmp && mv $SCRIPT_PATH/tmp $HIST_DIR/chat1
+# erases old chat chat history
+if [ $(cat $HIST_DIR/chat1.json 2> /dev/null | wc -l) -gt "$((MAX_CHAT_MEMORY * 2 + 1))" ]; then
+	awk 'NR>2' $HIST_DIR/chat1.json > $SCRIPT_PATH/tmp && mv $SCRIPT_PATH/tmp $HIST_DIR/chat1.json
 fi
 
 

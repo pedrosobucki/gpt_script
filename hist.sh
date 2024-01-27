@@ -1,5 +1,17 @@
 #!/bin/bash
 
+get_flags() {
+    while getopts ":t:T:m:h" opt; do
+        case $opt in
+            h) help_info;;
+            t) MAX_TOKENS=$OPTARG;;
+            T) TEMPERATURE=$OPTARG;;
+            m) MODEL=$OPTARG;;
+            ?) echo "Invalid option \"-$OPTARG\""; exit 1;;
+        esac
+    done
+}
+
 get_json_history() {
     if [ ! -f log ]; then
         echo "No history."
