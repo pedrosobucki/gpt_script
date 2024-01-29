@@ -11,12 +11,6 @@ if [ ! -t 0 ]; then
 	done
 fi
 
-# treats prompt special chars for json format
-PROMPT='{
-	"role": "user",
-	"content": "'$(echo -E ${@: -1} $STDIN | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')'"
-}'
-
 # imports config variables
 CONFIG=$SCRIPT_PATH/config.example
 export $(grep -v '^#' $CONFIG | xargs)
@@ -33,20 +27,34 @@ if [ -z $KEY ]; then
 fi
 
 help_info() {
-	echo -e "Flags:\n\t-h: Display help info\n\t-t: Changes max tokens returned by request (_MAX\_TOKENS_)\n\t-m: Changes model used in request (_MODEL_)\n\t-T: Changes temperature for promp processing (_TEMPERATURE_)"
+	echo -e "Flags:\n\t-h: Display help info\n\t-t: Changes max tokens returned by request (_MAX\_TOKENS_)\n\t-m: Changes model used in request (_MODEL_)\n\t-T: Changes temperature for promp processing (_TEMPERATURE_)\n\t-r: Returns RAW code, without any extra information or formatting"
 	exit 0
 }
 
+RAW=false
+
 # read optional flags
-while getopts ":t:T:m:h" opt; do
+while getopts ":t:T:m:hr" opt; do
         case $opt in
 		h) help_info;;
                 t) MAX_TOKENS=$OPTARG;;
                 T) TEMPERATURE=$OPTARG;;
                 m) MODEL=$OPTARG;;
+                r) RAW=true;;
                 ?) echo "Invalid option \"-$OPTARG\""; exit 1;;
         esac
 done
+
+RAW_MOD=
+if [ $RAW = "true" ]; then
+    RAW_MOD=". This specific response should only be code, without explanations."
+fi
+
+# treats prompt special chars for json format
+PROMPT='{
+	"role": "user",
+	"content": "'$(echo -E ${@: -1} $STDIN | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')$RAW_MOD'"
+}'
 
 echo -ne "  [ Generating... ]\033[0K\r"
 
@@ -95,7 +103,13 @@ if [ $(cat $SCRIPT_PATH/log 2> /dev/null | wc -l) -gt "$((MAX_CHAT_MEMORY * 2 + 
 fi
 
 # parsed json response to regular string
-PARSED=$(echo -e $ANSWER | sed 's/\\\"/\"/g')
+PARSED=$(echo -E $ANSWER | sed 's/\\\"/\"/g')
 PARSED=${PARSED:1:-1}
 
-echo $PARSED
+# removes markdown code block if exists and wants raw output
+if [ $RAW = "true" ]; then
+    echo -e $PARSED | sed '/```/d'
+    exit 0
+fi
+
+echo -e $PARSED
