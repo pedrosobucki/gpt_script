@@ -34,6 +34,7 @@ There are optional flags for overwriting some configuration fields
 - **-t**: Changes max tokens returned by request (_MAX\_TOKENS_)
 - **-m**: Changes model used in request (_MODEL_)
 - **-T**: Changes temperature for promp processing (_TEMPERATURE_)
+- **-r**: Returns raw code, without any extra information or formatting
 
 the **-h** flag can be used to read about available flags directly from the script.
 
