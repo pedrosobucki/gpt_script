@@ -55,18 +55,22 @@ if [ "$ERROR" != "null" ]; then
 	exit 1
 fi
 
+MESSAGE=$(echo -E $RESPONSE | jq '.choices | .[] | .message')
+echo -E cat $HIST_DIR/chat1.json | jq ".hist += [${MESSAGE}]"
+exit
+
 # saves prompt
-echo -E $PROMPT, >> $HIST_DIR/chat1.json
+cat $HIST_DIR/chat1.json | jq ".hist += [${PROMPT}]" > $HIST_DIR/chat1.json
 
 ANSWER=$(echo -E $RESPONSE | jq '.choices | .[] | .message.content')
 
 # saves context
-echo -E $(echo -E $RESPONSE | jq '.choices | .[] | .message'), >> $HIST_DIR/chat1.json
+cat $HIST_DIR/chat1.json | jq ".hist += [$(echo -E $RESPONSE | jq '.choices | .[] | .message')]" > $HIST_DIR/chat1.json
 
 # erases old chat chat history
-if [ $(cat $HIST_DIR/chat1.json 2> /dev/null | wc -l) -gt "$((MAX_CHAT_MEMORY * 2 + 1))" ]; then
-	awk 'NR>2' $HIST_DIR/chat1.json > $SCRIPT_PATH/tmp && mv $SCRIPT_PATH/tmp $HIST_DIR/chat1.json
+if [ $(cat $HIST_DIR/chat1.json | jq '.hist | length') -gt "$((MAX_CHAT_MEMORY * 2 + 1))" ]; then
+	# awk 'NR>2' $HIST_DIR/chat1.json > $SCRIPT_PATH/tmp && mv $SCRIPT_PATH/tmp $HIST_DIR/chat1.json
+    cat $HIST_DIR/chat1.json | jq '.hist | del(.[-2:])' > $HIST_DIR/chat1.json
 fi
-
 
 echo -e $ANSWER

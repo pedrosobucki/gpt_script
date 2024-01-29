@@ -11,6 +11,10 @@ fi
 PREV_CONTEXT=$(cat $HIST_DIR/chat1.json | jq '.hist')
 PREV_CONTEXT=${PREV_CONTEXT:1:-1}
 
+if [ ! -z "$PREV_CONTEXT" ]; then
+    PREV_CONTEXT=$PREV_CONTEXT,
+fi
+
 # imports config variables
 export $(grep -v '^#' $SCRIPT_PATH/config.example | xargs)
 
