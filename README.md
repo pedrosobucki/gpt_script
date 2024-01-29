@@ -55,6 +55,13 @@ or
 $ ask "what is this?" < gptask.sh
 ```
 
+## Generating code
+Using the `-r` flag, code can easily be outputed to a file.
+
+```bash
+$ ask "javascript code for consuming an SSE route, including imports" > sse_connection.js
+```
+
 ### Response
 ```bash
 "This is a bash script that interacts with the OpenAI API to generate responses based on user input. The script reads from standard input or command line arguments, sends a request to the OpenAI API, and prints the response. It also handles configuration variables, provides help information, and logs previous interactions."

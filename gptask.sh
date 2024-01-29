@@ -2,6 +2,7 @@
 
 SCRIPT_PATH=$(dirname $0)
 PREV_CONTEXT=$(cat $SCRIPT_PATH/log 2> /dev/null)
+OUTPUT=/dev/stdout
 
 # retrieves stdin if exists
 STDIN=""
@@ -47,7 +48,8 @@ done
 
 RAW_MOD=
 if [ $RAW = "true" ]; then
-    RAW_MOD=". This specific response should only be code, without explanations."
+    RAW_MOD=". This specific response should only be code, without explanations, markdown formating or anything other than the code itself."
+    OUTPUT=/dev/null
 fi
 
 # treats prompt special chars for json format
@@ -56,7 +58,7 @@ PROMPT='{
 	"content": "'$(echo -E ${@: -1} $STDIN | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')$RAW_MOD'"
 }'
 
-echo -ne "  [ Generating... ]\033[0K\r"
+echo -ne "  [ Generating... ]\033[0K\r" > $OUTPUT
 
 CURRENT_DIR=
 if [ $KNOW_CURRENT_DIR = "true" ]; then
@@ -80,7 +82,7 @@ BODY='{
 RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer $KEY" -d "$BODY")
 
 # cleans "searching" line
-echo -ne "                    \033[0K\r"
+echo -ne "                    \033[0K\r" > $OUTPUT
 
 # checks if error occured in fetch
 ERROR=$(echo -E $RESPONSE | jq .error.message)
