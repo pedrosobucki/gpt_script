@@ -64,7 +64,7 @@ $ ask "what is this?" < gptask.sh
 Using the `-r` flag, code can easily be outputed to a file.
 
 ```bash
-$ ask "javascript code for consuming an SSE route, including imports" > sse_connection.js
+$ ask -r "javascript code for consuming an SSE route, including imports" > sse_connection.js
 ```
 
 # Configuration file
