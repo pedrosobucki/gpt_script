@@ -94,5 +94,8 @@ if [ $(cat $SCRIPT_PATH/log 2> /dev/null | wc -l) -gt "$((MAX_CHAT_MEMORY * 2 + 
 	awk 'NR>2' $SCRIPT_PATH/log > $SCRIPT_PATH/tmp && mv $SCRIPT_PATH/tmp $SCRIPT_PATH/log
 fi
 
+# parsed json response to regular string
+PARSED=$(echo -e $ANSWER | sed 's/\\\"/\"/g')
+PARSED=${PARSED:1:-1}
 
-echo -e $ANSWER
+echo $PARSED
