@@ -18,11 +18,6 @@ help_info() {
 	exit 0
 }
 
-save_to_hist() {
-    LOG=$(cat $HIST_DIR/chat1.json | jq ".hist += [$1]")
-    echo -E $LOG > $HIST_DIR/chat1.json
-}
-
 RAW=false
 
 # read optional flags
@@ -85,7 +80,7 @@ fi
 MESSAGE=$(echo -E $RESPONSE | jq '.choices | .[] | .message')
 
 # saves prompt
-LOG=$(cat $HIST_DIR/chat1.json | jq ".hist += [${PROMPT}]")
+LOG=$(cat $HIST_DIR/chat1.json | jq ".hist += [$PROMPT]")
 echo -E $LOG > $HIST_DIR/chat1.json
 
 ANSWER=$(echo -E $MESSAGE | jq '.content')
@@ -94,7 +89,7 @@ ANSWER=$(echo -E $MESSAGE | jq '.content')
 LOG=$(cat $HIST_DIR/chat1.json | jq ".hist += [$MESSAGE]")
 echo -E $LOG > $HIST_DIR/chat1.json
 
-# erases old chat chat history
+# erases old chat history
 if [ "$(cat $HIST_DIR/chat1.json | jq '.hist | length')" == "$((MAX_CHAT_MEMORY * 2 + 1))" ]; then
     LOG=$(cat $HIST_DIR/chat1.json | jq '.hist | del(.[-2:])')
     echo -E $LOG > $HIST_DIR/chat1.json

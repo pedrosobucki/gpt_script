@@ -13,25 +13,34 @@ get_flags() {
 }
 
 get_json_history() {
-    if [ ! -f log ]; then
-        echo "No history."
-        exit 0
+    if [ ! -f $HIST_DIR/$1.json ]; then
+        echo "Chat \"$1\" not found."
+        exit 1
     fi
 
-    HISTORY='{"hist":['$(cat $SCRIPT_PATH/log)']}'
-
-    echo $HISTORY
+    cat $HIST_DIR/$1.json
 }
 
-display_history() {
-    echo $(get_json_history) | jq
+list_history() {
+    echo "Available chat history:"
+    ls $HIST_DIR -1 | sed 's/\.json$//'  
+}
+
+show_history() {
+    echo $(get_json_history $1) | jq
 }
 
 rm_history() {
-    rm $HIST_DIR/$1
+    if [ ! -f $HIST_DIR/$1.json ]; then
+        echo "Chat \"$1\" not found."
+        exit 1
+    fi
+
+    rm $HIST_DIR/$1.json
 }
 
 case $2 in
-    ls) display_history ${@: -1};;
-    *) source ./ask.sh;;
+    ls) list_history ${3:-chat1};;
+    rm) rm_history ${3:-chat1};;
+    *) list_history;;
 esac
