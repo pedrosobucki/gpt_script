@@ -1,15 +1,14 @@
 #!/bin/bash
 
-get_flags() {
-    while getopts ":t:T:m:h" opt; do
-        case $opt in
-            h) help_info;;
-            t) MAX_TOKENS=$OPTARG;;
-            T) TEMPERATURE=$OPTARG;;
-            m) MODEL=$OPTARG;;
-            ?) echo "Invalid option \"-$OPTARG\""; exit 1;;
-        esac
-    done
+help_info() {
+	echo -e "Flags:\n\t-h: Display help info\n\t-l: Returns last conversation\n\t-r: Repeats last response"
+	exit 0
+}
+
+parse() {
+    PARSED=$(echo -E $1 | sed 's/\\\"/\"/g')
+    PARSED=${PARSED:1:-1}
+    echo -E $PARSED
 }
 
 get_json_history() {
@@ -27,7 +26,27 @@ list_history() {
 }
 
 show_history() {
-    echo $(get_json_history $1) | jq
+    CHAT=$1
+
+    if [ ! -f $HIST_DIR/$CHAT.json ]; then
+        echo "Chat \"$CHAT\" not found."
+        exit 1
+    fi
+
+    cat $HIST_DIR/$CHAT.json | jq
+}
+
+repeat_answer() {
+    CHAT=$1
+
+    if [ ! -f $HIST_DIR/$CHAT.json ]; then
+        echo "Chat \"$CHAT\" not found."
+        exit 1
+    fi
+
+    ANSWER=$(cat $HIST_DIR/$CHAT.json | jq '.hist | .[-1] | .content')
+    ANSWER=$(parse "$ANSWER")
+    echo -e $ANSWER
 }
 
 rm_history() {
@@ -40,7 +59,9 @@ rm_history() {
 }
 
 case $2 in
-    ls) list_history ${3:-chat1};;
+    ls) list_history;;
     rm) rm_history ${3:-chat1};;
+    show) show_history ${3:-chat1};;
+    rpt) repeat_answer ${3:-chat1};; 
     *) list_history;;
 esac
