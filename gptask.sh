@@ -37,5 +37,7 @@ fi
 
 case $1 in
     hist) source $SCRIPT_PATH/hist.sh;;
+    rpt) ./gptask.sh hist rpt $2;;
+    cln) ./gptask.sh hist rm $2;;
     *) source $SCRIPT_PATH/ask.sh;;
 esac
