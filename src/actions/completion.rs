@@ -1,5 +1,5 @@
 use crate::config::Config;
-use crate::model::{self, Model};
+use crate::model::{self, Model, ModelImpl};
 use crate::chat::Message;
 use crate::session::Session;
 use crate::args::CompletionArgs;
@@ -21,7 +21,7 @@ pub async fn ask(args: CompletionArgs, session: &mut Session, config: Config) {
   // dbg!(&model);
   // dbg!(&session);
 
-  let answer: String = model.request(&mut session.messages).await;
+  let answer: String = model.complete(&mut session.messages).await;
   session.save();
   println!("{}", answer);
   // dbg!(&session);
